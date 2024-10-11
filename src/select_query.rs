@@ -1,9 +1,10 @@
-use crate::builder::{TCompileQuery, TGroup, TNewQuery, TColumn, EColumn};
+use crate::builder::{TGroup, TNewQuery, TColumn, EColumn, TSort, ESortDirection, TCompileQuery};
 
 pub struct SelectQuery {
 	table: Option<String>,
 	columns: Vec<String>,
 	group_by: Vec<String>,
+	sorts: Vec<String>,
 }
 
 impl TNewQuery for SelectQuery {
@@ -12,6 +13,7 @@ impl TNewQuery for SelectQuery {
 			table: None,
 			columns: vec![],
 			group_by: vec![],
+			sorts: vec![],
 		}
 	}
 
@@ -26,8 +28,20 @@ impl TCompileQuery for SelectQuery {
 		let mut sql = "SELECT".to_string();
 		sql = format!("{} {}", sql, compile_columns(self.columns));
 		sql = format!("{} FROM `{}`", sql, self.table.unwrap());
-		sql = format!("{} {}", sql, compile_group_by(self.group_by));
+
+		if !self.sorts.is_empty() {
+			sql = format!("{} {}", sql, compile_sort(self.sorts));
+		}
+
+		if !self.group_by.is_empty() {
+			sql = format!("{} {}", sql, compile_group_by(self.group_by));
+		}
+
 		sql.trim_end().to_string()
+	}
+
+	fn to_sql(self) -> String {
+		self.compile()
 	}
 }
 
@@ -69,17 +83,35 @@ impl TGroup for SelectQuery {
 	}
 }
 
-fn compile_columns(columns: Vec<String>) -> String {
-	match columns.is_empty() {
-		true => format!(" *"),
-		false => columns.join(", "),
+impl TSort for SelectQuery {
+	fn sort(mut self, column: String, direction: ESortDirection) -> Self {
+		let direction = match direction {
+			ESortDirection::ASC => "ASC",
+			ESortDirection::DESC => "DESC",
+		};
+
+		self.sorts.push(format!("`{}` {}", column, direction));
+		self
 	}
 }
 
 fn compile_group_by(group_by: Vec<String>) -> String {
-	if group_by.is_empty() {
-		return "".to_string();
+	match group_by.is_empty() {
+		true => "".to_string(),
+		false => format!("GROUP BY `{}`", group_by.join("`, `")),
 	}
+}
 
-	format!("GROUP BY `{}`", group_by.join("`, `"))
+fn compile_sort(sorts: Vec<String>) -> String {
+	match sorts.is_empty() {
+		true => "".to_string(),
+		false => format!("ORDER BY {}", sorts.join(", ")),
+	}
+}
+
+fn compile_columns(columns: Vec<String>) -> String {
+	match columns.is_empty() {
+		true => "*".to_string(),
+		false => columns.join(", "),
+	}
 }

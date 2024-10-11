@@ -7,7 +7,7 @@ fn main() {
 #[cfg(test)]
 mod tests {
 	use super::{
-		builder::{EColumn, TNewQuery, TColumn, TGroup, TCompileQuery},
+		builder::{EColumn, TNewQuery, TColumn, TGroup, TCompileQuery, ESortDirection, TSort},
 		select_query::SelectQuery,
 	};
 
@@ -51,5 +51,39 @@ mod tests {
 			.compile();
 
 		assert_eq!(query, "SELECT `user_id`, SUM(profit) AS `total_profit` FROM `profit` GROUP BY `user_id`");
+	}
+
+	#[test]
+	fn test_select_query_multiple_results_sort_asc() {
+		let query = SelectQuery::new()
+			.table("users".to_string())
+			.add_column(
+				EColumn::Column("id".to_string())
+			)
+			.add_columns(vec![
+				EColumn::Column("name".to_string()),
+				EColumn::Column("email".to_string()),
+			])
+			.sort("name".to_string(), ESortDirection::ASC)
+			.compile();
+
+		assert_eq!(query, "SELECT `id`, `name`, `email` FROM `users` ORDER BY `name` ASC");
+	}
+
+	#[test]
+	fn test_select_query_multiple_results_sort_desc() {
+		let query = SelectQuery::new()
+			.table("users".to_string())
+			.add_column(
+				EColumn::Column("id".to_string())
+			)
+			.add_columns(vec![
+				EColumn::Column("name".to_string()),
+				EColumn::Column("email".to_string()),
+			])
+			.sort("name".to_string(), ESortDirection::DESC)
+			.compile();
+
+		assert_eq!(query, "SELECT `id`, `name`, `email` FROM `users` ORDER BY `name` DESC");
 	}
 }
