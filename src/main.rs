@@ -24,7 +24,7 @@ mod tests {
 			])
 			.compile();
 
-		assert_eq!(query, "SELECT id, name, email FROM users");
+		assert_eq!(query, "SELECT `id`, `name`, `email` FROM `users`");
 	}
 
 	#[test]
@@ -34,7 +34,7 @@ mod tests {
 	    	.add_column(EColumn::Aggregated("total".to_string(), "COUNT(id)".to_string()))
 			.compile();
 
-		assert_eq!(query, "SELECT COUNT(id) AS `total` FROM users");
+		assert_eq!(query, "SELECT COUNT(id) AS `total` FROM `users`");
 	}
 
 	#[test]
@@ -50,6 +50,6 @@ mod tests {
 			.group_by("user_id".to_string())
 			.compile();
 
-		assert_eq!(query, "SELECT user_id, SUM(profit) AS `total_profit` FROM profit GROUP BY user_id");
+		assert_eq!(query, "SELECT `user_id`, SUM(profit) AS `total_profit` FROM `profit` GROUP BY `user_id`");
 	}
 }
