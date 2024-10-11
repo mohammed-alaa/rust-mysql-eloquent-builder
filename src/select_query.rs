@@ -27,7 +27,7 @@ impl TCompileQuery for SelectQuery {
 		sql = format!("{} {}", sql, compile_columns(self.columns));
 		sql = format!("{} FROM `{}`", sql, self.table.unwrap());
 		sql = format!("{} {}", sql, compile_group_by(self.group_by));
-		sql
+		sql.trim_end().to_string()
 	}
 }
 
