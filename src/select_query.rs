@@ -1,31 +1,12 @@
-use crate::builder::{CompileQuery, Group};
+use crate::builder::{TCompileQuery, TGroup, TNewQuery, TColumn, EColumn};
 
-#[allow(unused)]
-pub enum EColumn {
-	Aggregated(String, String),
-	Column(String),
-}
-
-#[allow(unused)]
 pub struct SelectQuery {
 	table: Option<String>,
 	columns: Vec<String>,
 	group_by: Vec<String>,
 }
 
-#[allow(unused)]
-pub trait NewQuery {
-	fn new() -> Self;
-	fn table(self, table: String) -> Self;
-}
-
-#[allow(unused)]
-pub trait TColumn {
-	fn add_column(self, column: EColumn) -> Self;
-	fn add_columns(self, column: Vec<EColumn>) -> Self;
-}
-
-impl NewQuery for SelectQuery {
+impl TNewQuery for SelectQuery {
 	fn new() -> Self {
 		Self {
 			table: None,
@@ -40,7 +21,7 @@ impl NewQuery for SelectQuery {
 	}
 }
 
-impl CompileQuery for SelectQuery {
+impl TCompileQuery for SelectQuery {
 	fn compile(self) -> String {
 		let mut sql = "SELECT".to_string();
 		sql = format!("{} {}", sql, compile_columns(self.columns));
@@ -76,7 +57,7 @@ impl TColumn for SelectQuery {
 	}
 }
 
-impl Group for SelectQuery {
+impl TGroup for SelectQuery {
 	fn group_by(mut self, column: String) -> Self {
 		self.group_by.push(column);
 		self

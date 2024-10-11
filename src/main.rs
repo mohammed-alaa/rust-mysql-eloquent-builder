@@ -6,10 +6,10 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-	use crate::builder::CompileQuery;
-
-use super::builder::Group;
-	use super::select_query::{SelectQuery, EColumn, NewQuery, TColumn};
+	use super::{
+		builder::{EColumn, TNewQuery, TColumn, TGroup, TCompileQuery},
+		select_query::SelectQuery,
+	};
 
 	#[test]
 	fn test_select_query_multiple_results() {
