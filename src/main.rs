@@ -6,16 +6,7 @@ fn main() {
 
 #[cfg(test)]
 mod tests {
-	use super::builder::{
-		EColumn,
-		TNewQuery,
-		TColumn,
-		TGroup,
-		TCompileQuery,
-		ESortDirection,
-		TSort,
-		select_query::SelectQuery
-	};
+	use crate::builder::select_query::*;
 
 	#[test]
 	fn test_select_query_multiple_results() {

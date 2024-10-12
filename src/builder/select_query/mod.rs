@@ -1,6 +1,16 @@
 mod compilers;
 
-use crate::builder::{TGroup, TNewQuery, TColumn, EColumn, TSort, ESortDirection, TCompileQuery};
+pub use crate::builder::{
+	enums::columns::EColumn,
+	enums::sort_directions::ESortDirection,
+	traits::{
+		query_compile::TCompileQuery,
+		column::TColumn,
+		new_query::TNewQuery,
+		sort::TSort,
+		group_by::TGroup,
+	},
+};
 use compilers::{
 	compile_columns, compile_sort, compile_group_by
 };
