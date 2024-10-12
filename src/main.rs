@@ -1,14 +1,20 @@
-mod select_query;
 mod builder;
+
 
 fn main() {
 }
 
 #[cfg(test)]
 mod tests {
-	use super::{
-		builder::{EColumn, TNewQuery, TColumn, TGroup, TCompileQuery, ESortDirection, TSort},
-		select_query::SelectQuery,
+	use super::builder::{
+		EColumn,
+		TNewQuery,
+		TColumn,
+		TGroup,
+		TCompileQuery,
+		ESortDirection,
+		TSort,
+		select_query::SelectQuery
 	};
 
 	#[test]

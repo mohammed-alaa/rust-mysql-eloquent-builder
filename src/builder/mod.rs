@@ -1,3 +1,7 @@
+pub mod select_query;
+pub mod group_by;
+// pub mod wheres;
+
 #[allow(unused)]
 pub enum EQueryType {
 	Select,

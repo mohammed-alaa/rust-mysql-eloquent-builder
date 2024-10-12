@@ -1,10 +1,16 @@
+mod compilers;
+
 use crate::builder::{TGroup, TNewQuery, TColumn, EColumn, TSort, ESortDirection, TCompileQuery};
+use compilers::{
+	compile_columns, compile_sort, compile_group_by
+};
 
 pub struct SelectQuery {
 	table: Option<String>,
 	columns: Vec<String>,
 	group_by: Vec<String>,
 	sorts: Vec<String>,
+	// where_conditions: Vec<String>,
 }
 
 impl TNewQuery for SelectQuery {
@@ -14,6 +20,7 @@ impl TNewQuery for SelectQuery {
 			columns: vec![],
 			group_by: vec![],
 			sorts: vec![],
+			// where_conditions: vec![],
 		}
 	}
 
@@ -92,26 +99,5 @@ impl TSort for SelectQuery {
 
 		self.sorts.push(format!("`{}` {}", column, direction));
 		self
-	}
-}
-
-fn compile_group_by(group_by: Vec<String>) -> String {
-	match group_by.is_empty() {
-		true => "".to_string(),
-		false => format!("GROUP BY `{}`", group_by.join("`, `")),
-	}
-}
-
-fn compile_sort(sorts: Vec<String>) -> String {
-	match sorts.is_empty() {
-		true => "".to_string(),
-		false => format!("ORDER BY {}", sorts.join(", ")),
-	}
-}
-
-fn compile_columns(columns: Vec<String>) -> String {
-	match columns.is_empty() {
-		true => "*".to_string(),
-		false => columns.join(", "),
 	}
 }
