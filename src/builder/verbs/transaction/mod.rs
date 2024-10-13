@@ -8,11 +8,7 @@ use self::structs::Transaction;
 
 impl TNewQuery for Transaction {
 	fn new() -> Self {
-		Transaction {
-			started: false,
-			committed: false,
-			rolled_back: false,
-		}
+		Transaction {}
 	}
 }
 
